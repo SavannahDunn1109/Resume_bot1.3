@@ -1,0 +1,82 @@
+ Technical Skills & Tools
+Java
+
+.NET
+
+Python
+
+REST APIs
+
+Microservices
+
+CI/CD
+
+DevSecOps
+
+Version Control Systems (e.g., Git)
+
+Automated Testing Frameworks
+
+Secure Coding
+
+Configuration Management
+
+Debugging & Optimization
+
+🧠 Methodologies & Practices
+Agile Development
+
+Scrum
+
+Software Lifecycle
+
+Documentation
+
+Code Reviews
+
+Modern Software Architectures
+
+🛡 Cybersecurity & Compliance
+IAT Level II
+
+CSWF (Cybersecurity Workforce Framework)
+
+CompTIA Security+ CE
+
+DoD Cybersecurity Standards
+
+Secure Coding Standards
+
+💼 Experience & Environment
+8–10+ Years of Experience
+
+Department of the Navy
+
+DoD Systems
+
+NAVWAR
+
+Remote Development
+
+Enterprise Applications
+
+🎯 Certifications & Clearance
+CompTIA Security+ CE
+
+SSCP (Systems Security Certified Practitioner)
+
+CND (Certified Network Defender)
+
+SECRET Clearance
+
+👥 Roles & Responsibilities
+Lead Design and Development
+
+Mentor Junior Developers
+
+Gather Requirements
+
+Translate Requirements to Solutions
+
+Maintain Technical Documentation
+
