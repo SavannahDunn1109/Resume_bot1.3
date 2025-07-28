@@ -11,7 +11,7 @@ from docx import Document
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
-FOLDER_PATH ="Documents/active resumes"
+FOLDER_PATH = "Documents/active resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
 
 # ========== AUTH ==========
