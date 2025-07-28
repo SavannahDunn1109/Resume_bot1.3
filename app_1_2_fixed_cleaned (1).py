@@ -32,7 +32,7 @@ for lst in lists:
         st.secrets["sharepoint"]["password"]
     ):
         st.error("Authentication failed")
-    return None
+        return None
     return ClientContext(SITE_URL, ctx_auth)
 
 # ========== FILE HELPERS ==========
