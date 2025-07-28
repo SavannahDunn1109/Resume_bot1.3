@@ -13,7 +13,17 @@ TARGET_EXTENSIONS = (".pdf", ".docx")
 # ========== AUTH ==========
 @st.cache_resource
 def connect_to_sharepoint():
-    from streamlit.runtime.secrets import secrets
+    @st.cache_resource
+def connect_to_sharepoint():
+    ctx_auth = AuthenticationContext(SITE_URL)
+    if not ctx_auth.acquire_token_for_user(
+        st.secrets["sharepoint"]["username"],
+        st.secrets["sharepoint"]["password"]
+    ):
+        st.error("Authentication failed")
+        return None
+    return ClientContext(SITE_URL, ctx_auth)
+
     ctx_auth = AuthenticationContext(SITE_URL)
     if not ctx_auth.acquire_token_for_user(
         secrets["sharepoint"]["username"],
