@@ -11,7 +11,7 @@ from PyPDF2 import PdfReader
 from docx import Document
 
 # ========== CONFIG ==========
-SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting/"
+SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
 LIBRARY = "Shared Documents"
 FOLDER = "Active Resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
@@ -102,7 +102,7 @@ if not ctx:
     st.stop()
 
 try:
-    relative_url = f"{LIBRARY}/{FOLDER}"
+    relative_url ="Shared%20Documents/Active%20Resumes"
     folder = ctx.web.get_folder_by_server_relative_url(relative_url)
     ctx.load(folder.files)
     ctx.execute_query()
