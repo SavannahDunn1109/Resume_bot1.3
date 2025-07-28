@@ -97,26 +97,34 @@ st.title("📄 Resume Scorer from SharePoint")
 st.write("Pulling resumes from SharePoint and scoring using keywords + extracting summary info...")
 
 ctx = connect_to_sharepoint()
-
-if ctx:
-    folder_url = f"{LIBRARY}/{FOLDER}"
-    folder = ctx.web.get_folder_by_server_relative_url(folder_url)
-    files = folder.files
-    ctx.load(files)
-    ctx.execute_query()
-    st.write("📂 Debug — files found:", [f.properties.get("Name") for f in folder.files])
-
-    filenames = [f.properties.get("Name", "Unknown") for f in folder.files]
-    if filenames:
-        st.success("✅ Files found in SharePoint folder:")
-        st.write(filenames)
-    else:
-        st.warning("⚠️ No files found in SharePoint folder.")
-except Exception as e:
-    st.error(f"❌ Failed to access folder: {e}")
-    st.stop()
-
 results = []
+
+for file in folder.files:
+    filename = file.properties.get("Name", "Unknown")
+    
+    try:
+        if not filename.endswith((".pdf", ".docx")):
+            continue
+
+        st.write(f"📄 Processing: `{filename}`")
+        file_url = file.properties["ServerRelativeUrl"]
+        file_bytes = download_file(ctx, file_url)
+        text = extract_text_from_pdf(file_bytes) if filename.endswith(".pdf") else extract_text_from_docx(file_bytes)
+
+        kw_score, keywords = keyword_score_resume(text)
+        name, degree, experience = extract_summary(text)
+
+        results.append({
+            "File Name": filename,
+            "Name": name,
+            "Degree": degree,
+            "Experience": experience,
+            "Keyword Score": kw_score,
+            "Keywords Found": keywords
+        })
+
+    except Exception as e:
+        st.error(f"❌ Error processing {filename}: {e}")
 
 for file in folder.files:
     filename = file.properties.get("Name", "Unknown")
