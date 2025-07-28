@@ -113,7 +113,7 @@ if ctx:
         st.write(filenames)
     else:
         st.warning("⚠️ No files found in SharePoint folder.")
-except Exception as e:
+    except Exception as e:
     st.error(f"❌ Failed to access folder: {e}")
     st.stop()
 
