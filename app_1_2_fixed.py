@@ -101,7 +101,7 @@ if not ctx:
     st.stop()
 
 try:
-    relative_url = f"/sites/Recruiting/{quote(LIBRARY)}/{quote(FOLDER)}"
+    relative_url = f"/sites/Recruiting/{LIBRARY}/{FOLDER}"
     folder = ctx.web.get_folder_by_server_relative_url(relative_url)
     ctx.load(folder.files)
     ctx.execute_query()
