@@ -11,7 +11,7 @@ from docx import Document
 from urllib.parse import quote
 
 # ========== CONFIG ==========
-SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting/Shared%20Documents/Active%20Resumes"
+SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting/Shared Documents/Active Resumes"
 LIBRARY = "Shared Documents"
 FOLDER = "Active Resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
@@ -105,6 +105,8 @@ try:
     files = folder.files
     ctx.load(files)
     ctx.execute_query()
+    st.write("📂 Debug — files found:", [f.properties.get("Name") for f in folder.files])
+
 
     filenames = [f.properties.get("Name", "Unknown") for f in folder.files]
     if filenames:
