@@ -18,6 +18,14 @@ KEYWORD_FILE = "Senior Software Key words.txt"
 # ========== AUTH ==========
 @st.cache_resource
 def connect_to_sharepoint():
+    lists = ctx.web.lists
+ctx.load(lists)
+ctx.execute_query()
+
+st.write("📚 Available Lists:")
+for lst in lists:
+    st.write("-", lst.properties["Title"])
+
     ctx_auth = AuthenticationContext(SITE_URL)
     if not ctx_auth.acquire_token_for_user(
         st.secrets["sharepoint"]["username"],
