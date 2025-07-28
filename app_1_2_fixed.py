@@ -14,7 +14,7 @@ from urllib.parse import quote
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
 LIBRARY = "Shared Documents"
 FOLDER = "Active Resumes"
-
+KEYWORD_FILE = "Senior Software Key words.txt"
 # ========== AUTH ==========
 @st.cache_resource
 def connect_to_sharepoint():
