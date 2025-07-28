@@ -106,7 +106,6 @@ if ctx:
     ctx.execute_query()
     st.write("📂 Debug — files found:", [f.properties.get("Name") for f in folder.files])
 
-
     filenames = [f.properties.get("Name", "Unknown") for f in folder.files]
     if filenames:
         st.success("✅ Files found in SharePoint folder:")
@@ -121,6 +120,7 @@ results = []
 
 for file in folder.files:
     filename = file.properties.get("Name", "Unknown")
+    
     try:
         if not filename.endswith((".pdf", ".docx")):
             continue
@@ -142,26 +142,7 @@ for file in folder.files:
             "Keywords Found": keywords
         })
 
-    except Exception as e:  # ✅ Now properly inside the for loop
-        st.error(f"❌ Error processing {filename}: {e}")
-        st.write(f"📄 Processing: `{filename}`")
-        file_url = file.properties["ServerRelativeUrl"]
-        file_bytes = download_file(ctx, file_url)
-        text = extract_text_from_pdf(file_bytes) if filename.endswith(".pdf") else extract_text_from_docx(file_bytes)
-
-        kw_score, keywords = keyword_score_resume(text)
-        name, degree, experience = extract_summary(text)
-
-        results.append({
-            "File Name": filename,
-            "Name": name,
-            "Degree": degree,
-            "Experience": experience,
-            "Keyword Score": kw_score,
-            "Keywords Found": keywords
-        })
-
-    except Exception as e:
+    except Exception as e:  # ✅ This is now inside the loop and try block
         st.error(f"❌ Error processing {filename}: {e}")
 
 if results:
