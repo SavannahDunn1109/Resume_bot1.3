@@ -97,11 +97,33 @@ st.title("📄 Resume Scorer from SharePoint")
 st.write("Pulling resumes from SharePoint and scoring using keywords + extracting summary info...")
 
 ctx = connect_to_sharepoint()
+if not ctx:
+    st.stop()
+
+# ✅ Try to access SharePoint folder
+try:
+    relative_url = f"/sites/Recruiting/{LIBRARY}/{FOLDER}"  # 🔧 No quote()
+    folder = ctx.web.get_folder_by_server_relative_url(relative_url)
+    ctx.load(folder.files)
+    ctx.execute_query()
+
+    filenames = [f.properties.get("Name", "Unknown") for f in folder.files]
+    if filenames:
+        st.success("✅ Files found in SharePoint folder:")
+        st.write(filenames)
+    else:
+        st.warning("⚠️ No files found in SharePoint folder.")
+
+except Exception as e:
+    st.error(f"❌ Failed to access folder: {e}")
+    st.stop()  # 🔒 Prevent NameError if folder isn't defined
+
+# ✅ Continue only if folder loaded successfully
 results = []
 
 for file in folder.files:
     filename = file.properties.get("Name", "Unknown")
-    
+
     try:
         if not filename.endswith((".pdf", ".docx")):
             continue
@@ -125,6 +147,7 @@ for file in folder.files:
 
     except Exception as e:
         st.error(f"❌ Error processing {filename}: {e}")
+
 
 for file in folder.files:
     filename = file.properties.get("Name", "Unknown")
