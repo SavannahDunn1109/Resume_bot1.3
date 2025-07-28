@@ -106,6 +106,11 @@ try:
     folder = ctx.web.get_folder_by_server_relative_url(relative_url)
     ctx.load(folder.files)
     ctx.execute_query()
+    st.write("📂 Debug: Folder loaded:", relative_url)
+st.write("📁 File count:", len(folder.files))
+for f in folder.files:
+    st.write("📄 File found:", f.properties.get("Name", "Unknown"))
+
 
     filenames = [f.properties.get("Name", "Unknown") for f in folder.files]
     if filenames:
