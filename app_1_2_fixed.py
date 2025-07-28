@@ -98,8 +98,7 @@ st.write("Pulling resumes from SharePoint and scoring using keywords + extractin
 
 ctx = connect_to_sharepoint()
 
-try:
-    relative_url = f"/sites/Recruiting/{LIBRARY}/{FOLDER}"
+if ctx:
     folder_url = f"{LIBRARY}/{FOLDER}"
     folder = ctx.web.get_folder_by_server_relative_url(folder_url)
     files = folder.files
