@@ -11,7 +11,7 @@ from docx import Document
 from urllib.parse import quote
 
 # ========== CONFIG ==========
-SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting/Shared Documents/Active Resumes"
+SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting/"
 LIBRARY = "Shared Documents"
 FOLDER = "Active Resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
