@@ -12,7 +12,7 @@ from docx import Document
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
-FOLDER_PATH = "Shared%20Documents/Active%20Resumes"
+FOLDER_PATH = "/sites/Recruiting/Shared Documents/Active Resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
 
 # ========== AUTH ==========
@@ -100,6 +100,20 @@ ctx = connect_to_sharepoint()
 if not ctx:
     st.stop()
 
+# 🔍 DEBUG: List all folders under Shared Documents
+try:
+    library = ctx.web.lists.get_by_title("Shared Documents")
+    root_folder = library.root_folder
+    ctx.load(root_folder)
+    ctx.load(root_folder.folders)
+    ctx.execute_query()
+
+    st.write("📁 Top-level folders inside 'Shared Documents':")
+    for folder in root_folder.folders:
+        st.write("📁", folder.properties["Name"])
+
+except Exception as e:
+    st.error(f"Error listing folders: {e}")
 try:
     folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
     ctx.load(folder.files)
