@@ -3,7 +3,6 @@ import streamlit as st
 from office365.sharepoint.client_context import ClientContext
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.files.file import File
-from office365.sharepoint.folders.folder import Folder
 import io
 import pandas as pd
 import os
@@ -12,20 +11,12 @@ from docx import Document
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
-FOLDER_PATH = "/sites/Recruiting/Documents/Active Resumes"
+FOLDER_PATH = "Documents/Active Resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
 
 # ========== AUTH ==========
 @st.cache_resource
 def connect_to_sharepoint():
-    lists = ctx.web.lists
-ctx.load(lists)
-ctx.execute_query()
-
-st.write("📚 Available Lists:")
-for lst in lists:
-    st.write("-", lst.properties["Title"])
-
     ctx_auth = AuthenticationContext(SITE_URL)
     if not ctx_auth.acquire_token_for_user(
         st.secrets["sharepoint"]["username"],
@@ -108,20 +99,18 @@ ctx = connect_to_sharepoint()
 if not ctx:
     st.stop()
 
-# 🔍 DEBUG: List all folders under Shared Documents
+# 🔍 List all available lists (debug helper)
 try:
-    library = ctx.web.lists.get_by_title("Shared Documents")
-    root_folder = library.root_folder
-    ctx.load(root_folder)
-    ctx.load(root_folder.folders)
+    lists = ctx.web.lists
+    ctx.load(lists)
     ctx.execute_query()
-
-    st.write("📁 Top-level folders inside 'Shared Documents':")
-    for folder in root_folder.folders:
-        st.write("📁", folder.properties["Name"])
-
+    st.write("📚 Available Lists:")
+    for lst in lists:
+        st.write("-", lst.properties["Title"])
 except Exception as e:
-    st.error(f"Error listing folders: {e}")
+    st.warning(f"Could not list lists: {e}")
+
+# 🔍 Load folder
 try:
     folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
     ctx.load(folder.files)
