@@ -142,6 +142,25 @@ for file in folder.files:
             "Keywords Found": keywords
         })
 
+    except Exception as e:  # ✅ Now properly inside the for loop
+        st.error(f"❌ Error processing {filename}: {e}")
+        st.write(f"📄 Processing: `{filename}`")
+        file_url = file.properties["ServerRelativeUrl"]
+        file_bytes = download_file(ctx, file_url)
+        text = extract_text_from_pdf(file_bytes) if filename.endswith(".pdf") else extract_text_from_docx(file_bytes)
+
+        kw_score, keywords = keyword_score_resume(text)
+        name, degree, experience = extract_summary(text)
+
+        results.append({
+            "File Name": filename,
+            "Name": name,
+            "Degree": degree,
+            "Experience": experience,
+            "Keyword Score": kw_score,
+            "Keywords Found": keywords
+        })
+
     except Exception as e:
         st.error(f"❌ Error processing {filename}: {e}")
 
