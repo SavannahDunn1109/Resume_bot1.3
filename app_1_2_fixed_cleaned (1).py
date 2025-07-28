@@ -12,8 +12,7 @@ from docx import Document
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
-LIBRARY = "Shared Documents"
-FOLDER = "Active Resumes"
+FOLDER_PATH = "Shared%20Documents/Active%20Resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
 
 # ========== AUTH ==========
@@ -76,7 +75,7 @@ def keyword_score_resume(text):
             found_keywords.append(kw)
     return score, ", ".join(found_keywords)
 
-# ========== LOCAL SUMMARY (simple extraction) ==========
+# ========== LOCAL SUMMARY ==========
 def extract_summary(text):
     lines = text.split("\n")
     name = "N/A"
@@ -102,15 +101,14 @@ if not ctx:
     st.stop()
 
 try:
-    relative_url ="Shared%20Documents/Active%20Resumes"
-    folder = ctx.web.get_folder_by_server_relative_url(relative_url)
+    folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
     ctx.load(folder.files)
     ctx.execute_query()
-    st.write("📂 Debug: Folder loaded:", relative_url)
+
+    st.write("📂 Debug: Folder loaded:", FOLDER_PATH)
     st.write("📁 File count:", len(folder.files))
     for f in folder.files:
         st.write("📄 File found:", f.properties.get("Name", "Unknown"))
-
 
     filenames = [f.properties.get("Name", "Unknown") for f in folder.files]
     if filenames:
@@ -156,6 +154,13 @@ if results:
     st.dataframe(df)
 
     output = io.BytesIO()
+    df.to_excel(output, index=False)
+    output.seek(0)
+    st.download_button("📥 Download Excel Report", output, file_name="resume_scores.xlsx")
+else:
+    st.info("ℹ️ No resumes were processed.")
+
+
     df.to_excel(output, index=False)
     output.seek(0)
     st.download_button("📥 Download Excel Report", output, file_name="resume_scores.xlsx")
