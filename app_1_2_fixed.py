@@ -97,13 +97,13 @@ st.title("📄 Resume Scorer from SharePoint")
 st.write("Pulling resumes from SharePoint and scoring using keywords + extracting summary info...")
 
 ctx = connect_to_sharepoint()
-if not ctx:
-    st.stop()
 
 try:
     relative_url = f"/sites/Recruiting/{LIBRARY}/{FOLDER}"
-    folder = ctx.web.get_folder_by_server_relative_url(relative_url)
-    ctx.load(folder.files)
+    folder_url = f"{LIBRARY}/{FOLDER}"
+    folder = ctx.web.get_folder_by_server_relative_url(folder_url)
+    files = folder.files
+    ctx.load(files)
     ctx.execute_query()
 
     filenames = [f.properties.get("Name", "Unknown") for f in folder.files]
