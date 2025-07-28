@@ -13,7 +13,7 @@ from urllib.parse import quote
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
 LIBRARY = "Shared Documents"
-FOLDER = "Forms"
+FOLDER = "Active Resumes"
 KEYWORD_FILE = "Senior Software Key words.txt"
 
 # ========== AUTH ==========
