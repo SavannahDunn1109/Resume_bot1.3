@@ -159,10 +159,7 @@ if results:
     st.download_button("📥 Download Excel Report", output, file_name="resume_scores.xlsx")
 else:
     st.info("ℹ️ No resumes were processed.")
-
-
     df.to_excel(output, index=False)
     output.seek(0)
     st.download_button("📥 Download Excel Report", output, file_name="resume_scores.xlsx")
-else:
-    st.info("ℹ️ No resumes were processed.")
+
