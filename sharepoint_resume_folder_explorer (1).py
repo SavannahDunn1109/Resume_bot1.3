@@ -1,45 +1,50 @@
-
-import streamlit as st
-from office365.runtime.auth.user_credential import UserCredential
+mport streamlit as st
 from office365.sharepoint.client_context import ClientContext
+from office365.runtime.auth.authentication_context import AuthenticationContext
 
-# SharePoint credentials from Streamlit secrets
-SHAREPOINT_SITE = "https://eleven090.sharepoint.com/sites/Recruiting"
-USERNAME = st.secrets["sharepoint"]["username"]
-PASSWORD = st.secrets["sharepoint"]["password"]
-FOLDER_PATH = "/sites/Recruiting/Shared Documents/Active Resumes"
+# ========== CONFIG ==========
+SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
+FOLDER_PATH = "/sites/Recruiting/Shared Documents"
+TARGET_EXTENSIONS = (".pdf", ".docx")
 
-st.title("📄 Resume Folder Scanner (Improved)")
-st.write("📂 Folder: " + FOLDER_PATH)
-
-# --- Connect to SharePoint ---
+# ========== AUTH ==========
+@st.cache_resource
 def connect_to_sharepoint():
-    creds = UserCredential(USERNAME, PASSWORD)
-    ctx = ClientContext(SHAREPOINT_SITE).with_credentials(creds)
-    return ctx
+    ctx_auth = AuthenticationContext(SITE_URL)
+    if not ctx_auth.acquire_token_for_user(
+        st.secrets["sharepoint"]["username"],
+        st.secrets["sharepoint"]["password"]
+    ):
+        st.error("Authentication failed")
+        return None
+    return ClientContext(SITE_URL, ctx_auth)
 
-# --- Load resume files from SharePoint ---
-def load_resumes():
-    ctx = connect_to_sharepoint()
-    folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
-    ctx.load(folder.files)
-    ctx.execute_query()
-    files = list(folder.files)
-    return files
+# ========== SCAN CONFIRMED FOLDER ==========
+def scan_confirmed_folder(ctx, folder_path):
+    try:
+        folder = ctx.web.get_folder_by_server_relative_url(folder_path)
+        ctx.load(folder)
+        ctx.load(folder.files)
+        ctx.execute_query()
 
-# --- Display resume file info ---
-try:
-    files = load_resumes()
+        st.subheader(f"📂 Folder: {folder_path}")
+        if not folder.files:
+            st.warning("⚠️ No files found in this folder.")
 
-    if not files:
-        st.warning("⚠️ No files found in this folder.")
-    else:
-        st.success(f"✅ Found {len(files)} files in SharePoint folder.")
-        for file in files:
-            st.write(f"📄 {file.properties['Name']}")
-            st.json({key: file.properties[key] for key in file.properties if key in [
-                "Name", "ServerRelativeUrl", "TimeCreated", "TimeLastModified", "Length"
-            ]})
+        for f in folder.files:
+            name = f.properties.get("Name", "Unknown")
+            if name.lower().endswith(TARGET_EXTENSIONS):
+                st.write(f"📄 {name}")
 
-except Exception as e:
-    st.error(f"❌ Error: {e}")
+    except Exception as e:
+        st.error(f"❌ Could not access folder '{folder_path}': {e}")
+
+# ========== MAIN ==========
+st.title("📄 Resume Folder Scanner (Direct Path)")
+
+ctx = connect_to_sharepoint()
+if not ctx:
+    st.stop()
+
+scan_confirmed_folder(ctx, FOLDER_PATH)
+
