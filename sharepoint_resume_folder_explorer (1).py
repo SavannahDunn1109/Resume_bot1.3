@@ -2,13 +2,13 @@ import streamlit as st
 from office365.runtime.auth.user_credential import UserCredential
 from office365.sharepoint.client_context import ClientContext
 
-# SharePoint credentials from Streamlit secrets
+# --- SharePoint credentials from Streamlit secrets ---
 SHAREPOINT_SITE = "https://eleven090.sharepoint.com/sites/Recruiting"
 USERNAME = st.secrets["sharepoint"]["username"]
 PASSWORD = st.secrets["sharepoint"]["password"]
 FOLDER_PATH = "/sites/Recruiting/Shared Documents/Active Resumes"
 
-st.title("📄 Resume Folder Scanner (Improved)")
+st.title("📄 Resume Folder Scanner (Direct Path)")
 st.write("📂 Folder: " + FOLDER_PATH)
 
 # --- Connect to SharePoint ---
@@ -17,29 +17,27 @@ def connect_to_sharepoint():
     ctx = ClientContext(SHAREPOINT_SITE).with_credentials(creds)
     return ctx
 
-# --- Load resume files from SharePoint ---
-def load_resumes():
+# --- Load files from SharePoint folder ---
+def load_resumes(folder_path):
     ctx = connect_to_sharepoint()
-    folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
+    folder = ctx.web.get_folder_by_server_relative_url(folder_path)
     ctx.load(folder.files)
     ctx.execute_query()
-    files = list(folder.files)  # Force evaluation
-    return files, ctx
+    return folder.files
 
-# --- Display resume file info ---
+# --- Main execution ---
 try:
-    files, ctx = load_resumes()
+    files = load_resumes(FOLDER_PATH)
 
     if not files:
         st.warning("⚠️ No files found in this folder.")
     else:
-        st.success(f"✅ Found {len(files)} files:")
+        st.success(f"✅ Found {len(files)} files in SharePoint folder.")
         for file in files:
-            st.write(f"\n📄 {file.properties['Name']}")
-            st.json({key: file.properties[key] for key in file.properties if key in [
-                "Name", "ServerRelativeUrl", "TimeCreated", "TimeLastModified", "Length"
-            ]})
+            st.write(f"📄 {file.properties['Name']}")
+            st.json(file.properties)  # Optional: shows full metadata
 
 except Exception as e:
     st.error(f"❌ Error: {e}")
+
 
