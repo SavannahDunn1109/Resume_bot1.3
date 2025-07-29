@@ -1,16 +1,33 @@
-import streamlit as st
+iimport streamlit as st
+from office365.sharepoint.client_context import ClientContext
+from office365.runtime.auth.user_credential import UserCredential
 
-st.title("🔐 Streamlit Secrets Test")
+# Credentials and config
+SHAREPOINT_SITE = "https://eleven090.sharepoint.com/sites/Recruiting"
+FOLDER_PATH = "Shared Documents/Active Resumes"
+USERNAME = st.secrets["sharepoint"]["username"]
+PASSWORD = st.secrets["sharepoint"]["password"]
 
-# Check if 'sharepoint' section exists
-if "sharepoint" in st.secrets:
-    creds = st.secrets["sharepoint"]
+st.title("📄 Resume Folder Scanner (Improved)")
+st.write(f"📂 Folder: /sites/Recruiting/{FOLDER_PATH}")
 
-    st.success("✅ SharePoint secrets loaded successfully!")
-    st.write("📌 Username:", creds.get("username", "Not found"))
-    
-    # Optional: Only show masked password length
-    password = creds.get("password", "")
-    st.write("🔑 Password length:", len(password))
-else:
-    st.error("❌ 'sharepoint' section not found in secrets.")
+try:
+    creds = UserCredential(USERNAME, PASSWORD)
+    ctx = ClientContext(SHAREPOINT_SITE).with_credentials(creds)
+
+    folder_url = f"/sites/Recruiting/{FOLDER_PATH}"
+    folder = ctx.web.get_folder_by_server_relative_url(folder_url)
+    ctx.load(folder.files)
+    ctx.execute_query()
+
+    files = list(folder.files)
+
+    if not files:
+        st.warning("⚠️ No files found in this folder.")
+    else:
+        st.success(f"✅ Found {len(files)} files:")
+        for file in files:
+            st.write(f"📄 {file.properties['Name']}")
+
+except Exception as e:
+    st.error(f"❌ Error: {e}")
