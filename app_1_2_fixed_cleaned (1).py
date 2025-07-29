@@ -5,7 +5,12 @@ from office365.runtime.auth.authentication_context import AuthenticationContext
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
-LIBRARIES = ["Documents", "Shared Documents"]
+LIBRARIES = [
+    "ResumeScores",
+    "Site Assets",
+    "Site Pages",
+    "User Information List"
+]
 TARGET_EXTENSIONS = (".pdf", ".docx")
 
 # ========== AUTH ==========
@@ -47,7 +52,7 @@ def scan_library(ctx, name):
         st.error(f"❌ Could not access library '{name}': {e}")
 
 # ========== MAIN ==========
-st.title("📚 SharePoint Library Scanner")
+st.title("📚 SharePoint Real Library Scanner")
 
 ctx = connect_to_sharepoint()
 if not ctx:
@@ -55,3 +60,4 @@ if not ctx:
 
 for lib in LIBRARIES:
     scan_library(ctx, lib)
+
