@@ -30,7 +30,8 @@ try:
     ctx.load(web)
     ctx.execute_query()
 
-    root_url = web.serverRelativeUrl
+    root_url = web.properties["ServerRelativeUrl"]
+
     st.write(f"🔗 Site Relative URL: `{root_url}`")
 
     root_folder = web.get_folder_by_server_relative_url(root_url)
