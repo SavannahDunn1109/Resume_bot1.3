@@ -1,6 +1,6 @@
-streamlit
+docx2txt
+pdfplumber
 pandas
-PyPDF2
-python-docx
+streamlit
 office365-rest-python-client
 openpyxl
