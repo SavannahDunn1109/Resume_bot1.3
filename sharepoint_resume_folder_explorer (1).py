@@ -1,14 +1,14 @@
+
 import streamlit as st
 from office365.runtime.auth.user_credential import UserCredential
 from office365.sharepoint.client_context import ClientContext
 
-# --- SharePoint credentials from Streamlit secrets ---
+# SharePoint credentials from Streamlit secrets
 SHAREPOINT_SITE = "https://eleven090.sharepoint.com/sites/Recruiting"
 USERNAME = st.secrets["sharepoint"]["username"]
 PASSWORD = st.secrets["sharepoint"]["password"]
 FOLDER_PATH = "/sites/Recruiting/Shared Documents/Active Resumes"
 
-# --- UI Header ---
 st.title("📄 Resume Folder Scanner (Improved)")
 st.write("📂 Folder: " + FOLDER_PATH)
 
@@ -18,17 +18,18 @@ def connect_to_sharepoint():
     ctx = ClientContext(SHAREPOINT_SITE).with_credentials(creds)
     return ctx
 
-# --- Load files from SharePoint folder ---
-def load_files_from_folder():
+# --- Load resume files from SharePoint ---
+def load_resumes():
     ctx = connect_to_sharepoint()
     folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
     ctx.load(folder.files)
     ctx.execute_query()
-    return list(folder.files), ctx
+    files = list(folder.files)
+    return files
 
-# --- Display results ---
+# --- Display resume file info ---
 try:
-    files, ctx = load_files_from_folder()
+    files = load_resumes()
 
     if not files:
         st.warning("⚠️ No files found in this folder.")
@@ -36,11 +37,9 @@ try:
         st.success(f"✅ Found {len(files)} files in SharePoint folder.")
         for file in files:
             st.write(f"📄 {file.properties['Name']}")
-            st.json({
-                key: file.properties[key]
-                for key in file.properties
-                if key in ["Name", "ServerRelativeUrl", "TimeCreated", "TimeLastModified", "Length"]
-            })
+            st.json({key: file.properties[key] for key in file.properties if key in [
+                "Name", "ServerRelativeUrl", "TimeCreated", "TimeLastModified", "Length"
+            ]})
 
 except Exception as e:
     st.error(f"❌ Error: {e}")
