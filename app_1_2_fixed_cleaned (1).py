@@ -39,7 +39,7 @@ try:
     if not root_folder.folders:
     st.warning("⚠️ No folders found at root. Try checking permissions or navigating deeper.")
 
-st.subheader("📁 Top-Level Folders at Site Root:")
+    st.subheader("📁 Top-Level Folders at Site Root:")
 for folder in root_folder.folders:
     name = folder.properties.get("Name", "Unknown")
     url = folder.properties.get("ServerRelativeUrl", "Unknown")
