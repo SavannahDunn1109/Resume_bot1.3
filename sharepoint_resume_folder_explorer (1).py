@@ -86,7 +86,15 @@ if keyword_file:
 if keywords:
     try:
         files, ctx = load_resumes()
-        st.info(f"Found {len(files)} files in SharePoint folder.")
+       def load_resumes():
+ if not files:
+    st.warning("⚠️ No files found. Are you sure there are files in this folder?")
+else:
+    st.success(f"✅ Found {len(files)} files in SharePoint folder.")
+    for file in files:
+        st.write(f"📄 {file.properties['Name']}")
+
+
 
         results = []
         for file in files:
