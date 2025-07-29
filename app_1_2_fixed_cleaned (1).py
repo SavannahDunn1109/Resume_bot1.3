@@ -10,7 +10,7 @@ SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
 @st.cache_resource
 def connect_to_sharepoint():
     ctx_auth = AuthenticationContext(SITE_URL)
-    if not ctx_auth.acquire_token_for_user(
+if not ctx_auth.acquire_token_for_user(
         st.secrets["sharepoint"]["username"],
         st.secrets["sharepoint"]["password"]
     ):
