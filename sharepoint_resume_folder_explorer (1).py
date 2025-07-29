@@ -5,7 +5,7 @@ from office365.runtime.auth.authentication_context import AuthenticationContext
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
-FOLDER_PATH = "/sites/Recruiting/Shared Documents"
+FOLDER_PATH = "/sites/Recruiting/Shared Documents/Active Resumes"
 TARGET_EXTENSIONS = (".pdf", ".docx")
 
 # ========== AUTH ==========
