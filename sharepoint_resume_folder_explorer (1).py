@@ -21,7 +21,8 @@ def connect_to_sharepoint():
 def load_resumes():
     ctx = connect_to_sharepoint()
 folder = ctx.web.get_folder_by_server_relative_url(folder_url)
-ctx.load(folder, ["Files"])
+folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
+
 ctx.execute_query()
 
 files = folder.files
