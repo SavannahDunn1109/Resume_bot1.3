@@ -2,15 +2,10 @@
 import streamlit as st
 from office365.sharepoint.client_context import ClientContext
 from office365.runtime.auth.authentication_context import AuthenticationContext
+from office365.sharepoint.lists.list_collection import ListCollection
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
-LIBRARIES = [
-    "ResumeScores",
-    "Site Assets",
-    "Site Pages",
-    "User Information List"
-]
 TARGET_EXTENSIONS = (".pdf", ".docx")
 
 # ========== AUTH ==========
@@ -24,6 +19,22 @@ def connect_to_sharepoint():
         st.error("Authentication failed")
         return None
     return ClientContext(SITE_URL, ctx_auth)
+
+# ========== DISCOVER DOCUMENT LIBRARIES ==========
+def get_document_libraries(ctx):
+    try:
+        lists = ctx.web.lists
+        ctx.load(lists)
+        ctx.execute_query()
+
+        doc_libs = []
+        for sp_list in lists:
+            if sp_list.properties.get("BaseTemplate") == 101:  # 101 = Document Library
+                doc_libs.append(sp_list.properties.get("Title"))
+        return doc_libs
+    except Exception as e:
+        st.error(f"❌ Failed to fetch document libraries: {e}")
+        return []
 
 # ========== SCAN SELECTED LIBRARY ==========
 def scan_selected_library(ctx, selected_library):
@@ -57,13 +68,15 @@ def scan_selected_library(ctx, selected_library):
         return []
 
 # ========== MAIN ==========
-st.title("🔍 SharePoint Resume Folder Explorer")
+st.title("🔍 Dynamic SharePoint Library Explorer")
 
 ctx = connect_to_sharepoint()
 if not ctx:
     st.stop()
 
-selected_library = st.selectbox("📚 Select a document library to explore:", LIBRARIES)
+all_libraries = get_document_libraries(ctx)
+selected_library = st.selectbox("📚 Select a document library to explore:", all_libraries)
+
 if selected_library:
     folder_urls = scan_selected_library(ctx, selected_library)
     if folder_urls:
