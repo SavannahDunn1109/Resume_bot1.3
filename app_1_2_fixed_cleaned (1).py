@@ -38,7 +38,7 @@ try:
     ctx.load(root_folder.folders)
     ctx.execute_query()
 
-    if not root_folder.folders:
+if not root_folder.folders:
     st.warning("⚠️ No folders found at root. Try checking permissions or navigating deeper.")
     st.subheader("📁 Top-Level Folders at Site Root:")
 
