@@ -1,9 +1,7 @@
-
 import streamlit as st
 from office365.sharepoint.client_context import ClientContext
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.folders.folder import Folder
-import os
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
@@ -13,21 +11,10 @@ TARGET_EXTENSIONS = (".pdf", ".docx")
 # ========== AUTH ==========
 @st.cache_resource
 def connect_to_sharepoint():
-    @st.cache_resource
-def connect_to_sharepoint():
     ctx_auth = AuthenticationContext(SITE_URL)
     if not ctx_auth.acquire_token_for_user(
         st.secrets["sharepoint"]["username"],
         st.secrets["sharepoint"]["password"]
-    ):
-        st.error("Authentication failed")
-        return None
-    return ClientContext(SITE_URL, ctx_auth)
-
-    ctx_auth = AuthenticationContext(SITE_URL)
-    if not ctx_auth.acquire_token_for_user(
-        secrets["sharepoint"]["username"],
-        secrets["sharepoint"]["password"]
     ):
         st.error("Authentication failed")
         return None
@@ -66,9 +53,4 @@ try:
 except Exception as e:
     st.error(f"❌ Failed to list folders and files: {e}")
 
-
-    output.seek(0)
-    st.download_button("📥 Download Excel Report", output, file_name="resume_scores.xlsx")
-else:
-    st.info("ℹ️ No resumes were processed.")
 
