@@ -29,22 +29,19 @@ try:
     web = ctx.web
     ctx.load(web)
     ctx.execute_query()
-
+    
     root_url = web.properties["ServerRelativeUrl"]
-
-    st.write(f"🔗 Site Relative URL: `{root_url}`")
-
-    root_folder = web.get_folder_by_server_relative_url(root_url)
+    root_folder = ctx.web.get_folder_by_server_relative_url(root_url)
     ctx.load(root_folder)
     ctx.load(root_folder.folders)
     ctx.execute_query()
 
-    st.subheader("📁 Top-Level Folders at Site Root:")
-    for folder in root_folder.folders:
-        name = folder.properties.get("Name", "Unknown")
-        url = folder.properties.get("ServerRelativeUrl", "Unknown")
-        st.write(f"📁 `{name}` → `{url}`")
+if not root_folder.folders:
+    st.warning("⚠️ No folders found at root. Try checking permissions or navigating deeper.")
 
-except Exception as e:
-    st.error(f"❌ Failed to list root folders: {e}")
+st.subheader("📁 Top-Level Folders at Site Root:")
+for folder in root_folder.folders:
+    name = folder.properties.get("Name", "Unknown")
+    url = folder.properties.get("ServerRelativeUrl", "Unknown")
+    st.write(f"📁 `{name}` → `{url}`")
 
