@@ -38,3 +38,5 @@ try:
         name = folder.properties.get("Name", "Unknown")
         url = folder.properties.get("ServerRelativeUrl", "Unknown")
         st.write(f"📁 `{name}` → `{url}`")
+except Exception as e:
+    st.error(f"❌ Failed to list root folders: {e}")
