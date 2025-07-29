@@ -1,5 +1,3 @@
-
-import streamlit as st
 from office365.runtime.auth.user_credential import UserCredential
 from office365.sharepoint.client_context import ClientContext
 
@@ -39,4 +37,3 @@ try:
             st.write(f"📄 {file.properties['Name']}")
 except Exception as e:
     st.error(f"❌ Error: {e}")
-
