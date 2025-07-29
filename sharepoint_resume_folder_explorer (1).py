@@ -3,6 +3,7 @@ from office365.sharepoint.client_context import ClientContext
 
 # SharePoint credentials from Streamlit secrets
 SHAREPOINT_SITE = "https://eleven090.sharepoint.com/sites/Recruiting"
+import streamlit as st
 USERNAME = st.secrets["sharepoint"]["username"]
 PASSWORD = st.secrets["sharepoint"]["password"]
 FOLDER_PATH = "/sites/Recruiting/Shared Documents/Active Resumes"
