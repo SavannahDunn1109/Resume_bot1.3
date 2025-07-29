@@ -10,7 +10,7 @@ SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
 @st.cache_resource
 def connect_to_sharepoint():
     ctx_auth = AuthenticationContext(SITE_URL)
-if not ctx_auth.acquire_token_for_user(
+    if not ctx_auth.acquire_token_for_user(
         st.secrets["sharepoint"]["username"],
         st.secrets["sharepoint"]["password"]
     ):
@@ -38,8 +38,8 @@ try:
 
     if not root_folder.folders:
     st.warning("⚠️ No folders found at root. Try checking permissions or navigating deeper.")
-
     st.subheader("📁 Top-Level Folders at Site Root:")
+
 for folder in root_folder.folders:
     name = folder.properties.get("Name", "Unknown")
     url = folder.properties.get("ServerRelativeUrl", "Unknown")
