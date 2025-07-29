@@ -69,6 +69,5 @@ if selected_library:
     if folder_urls:
         selected_folder = st.selectbox("📁 Choose a folder path to use in your app:", folder_urls)
         if selected_folder:
-            st.success(f"✅ Copy and use this folder path in your resume app:
+            st.success(f"✅ Copy and use this folder path in your resume app: {selected_folder}")
 
-`{selected_folder}`")
