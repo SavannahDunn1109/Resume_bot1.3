@@ -8,7 +8,7 @@ USERNAME = st.secrets["sharepoint"]["username"]
 PASSWORD = st.secrets["sharepoint"]["password"]
 FOLDER_PATH = "/sites/Recruiting/Shared Documents/Active Resumes"
 
-st.title("📄 st.title("📄 Resume Folder Scanner (Improved)")
+st.title("📄 Resume Folder Scanner (Improved)")
 st.write("📂 Folder: " + FOLDER_PATH)
 
 # --- Connect to SharePoint ---
