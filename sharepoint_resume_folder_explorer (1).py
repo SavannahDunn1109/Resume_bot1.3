@@ -20,10 +20,16 @@ def connect_to_sharepoint():
 # --- Load resume files from SharePoint ---
 def load_resumes():
     ctx = connect_to_sharepoint()
-    folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
-    ctx.load(folder.files)
-    ctx.execute_query()
-    return folder.files, ctx
+folder = ctx.web.get_folder_by_server_relative_url(folder_url)
+ctx.load(folder, ["Files"])
+ctx.execute_query()
+
+files = folder.files
+ctx.load(files)
+ctx.execute_query()
+
+
+
 
 # --- Display resume file info ---
 try:
