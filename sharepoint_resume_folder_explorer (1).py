@@ -1,6 +1,6 @@
 import streamlit as st
 from office365.runtime.auth.user_credential import UserCredential
-
+from office365.sharepoint.client_context import ClientContext
 
 # --- SharePoint credentials from Streamlit secrets ---
 SHAREPOINT_SITE = "https://eleven090.sharepoint.com/sites/Recruiting"
@@ -39,5 +39,3 @@ try:
 
 except Exception as e:
     st.error(f"❌ Error: {e}")
-
-
