@@ -19,7 +19,7 @@ def connect_to_sharepoint():
     return ClientContext(SITE_URL, ctx_auth)
 
 # ========== MAIN ==========
-st.title("🔍 SharePoint Top-Level Folder Scanner")
+st.title("🔍 SharePoint Top-Level Folder Scanner (Fixed ServerRelativeUrl)")
 
 ctx = connect_to_sharepoint()
 if not ctx:
@@ -28,7 +28,12 @@ if not ctx:
 try:
     web = ctx.web
     ctx.load(web)
-    root_folder = web.root_folder
+    ctx.execute_query()
+
+    root_url = web.serverRelativeUrl
+    st.write(f"🔗 Site Relative URL: `{root_url}`")
+
+    root_folder = web.get_folder_by_server_relative_url(root_url)
     ctx.load(root_folder)
     ctx.load(root_folder.folders)
     ctx.execute_query()
@@ -38,5 +43,7 @@ try:
         name = folder.properties.get("Name", "Unknown")
         url = folder.properties.get("ServerRelativeUrl", "Unknown")
         st.write(f"📁 `{name}` → `{url}`")
+
 except Exception as e:
     st.error(f"❌ Failed to list root folders: {e}")
+
