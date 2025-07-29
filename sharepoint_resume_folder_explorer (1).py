@@ -1,4 +1,4 @@
-iimport streamlit as st
+import streamlit as st
 from office365.sharepoint.client_context import ClientContext
 from office365.runtime.auth.user_credential import UserCredential
 
