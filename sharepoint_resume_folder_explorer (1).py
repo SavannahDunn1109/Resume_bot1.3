@@ -52,7 +52,8 @@ def scan_selected_library(ctx, selected_library):
         for f in folder.folders:
             name = f.properties.get("Name", "Unknown")
             url = f.properties.get("ServerRelativeUrl", "")
-            folder_path = f"/sites/Recruiting/{Active Resumes}"
+            folder_path = "/sites/Recruiting/Active Resumes"
+
 
             st.write(f"📁 `{name}` → `{url}`")
 
