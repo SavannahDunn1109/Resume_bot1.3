@@ -10,15 +10,13 @@ SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
 @st.cache_resource
 def connect_to_sharepoint():
     ctx_auth = AuthenticationContext(SITE_URL)
-
-if not ctx_auth.acquire_token_for_user(
+    if not ctx_auth.acquire_token_for_user(
         st.secrets["sharepoint"]["username"],
         st.secrets["sharepoint"]["password"]
     ):
         st.error("Authentication failed")
-    
-return None
-return ClientContext(SITE_URL, ctx_auth)
+        return None
+    return ClientContext(SITE_URL, ctx_auth)
 
 # ========== MAIN ==========
 st.title("🔍 SharePoint Top-Level Folder Scanner (Fixed ServerRelativeUrl)")
@@ -31,9 +29,10 @@ try:
     web = ctx.web
     ctx.load(web)
     ctx.execute_query()
-    
-  try:
+
     root_url = web.properties["ServerRelativeUrl"]
+    st.write(f"🔗 Site Relative URL: `{root_url}`")
+
     root_folder = ctx.web.get_folder_by_server_relative_url(root_url)
     ctx.load(root_folder)
     ctx.load(root_folder.folders)
@@ -50,4 +49,3 @@ try:
 
 except Exception as e:
     st.error(f"❌ Failed to list root folders: {e}")
-
