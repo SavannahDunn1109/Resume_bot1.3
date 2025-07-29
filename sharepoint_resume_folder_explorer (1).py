@@ -72,7 +72,8 @@ def load_resumes():
     folder = ctx.web.get_folder_by_server_relative_url(FOLDER_PATH)
     ctx.load(folder.files)
     ctx.execute_query()
-    return folder.files, ctx
+    files = list(folder.files)  # Force evaluation
+    return files, ctx
 
 # --- Upload keyword list ---
 st.subheader("📄 Upload a keyword list (.txt)")
