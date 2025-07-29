@@ -2,7 +2,6 @@
 import streamlit as st
 from office365.sharepoint.client_context import ClientContext
 from office365.runtime.auth.authentication_context import AuthenticationContext
-from office365.sharepoint.lists.list_collection import ListCollection
 
 # ========== CONFIG ==========
 SITE_URL = "https://eleven090.sharepoint.com/sites/Recruiting"
